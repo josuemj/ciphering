@@ -19,3 +19,11 @@ Output:
 ### ASCII reference
 
 For the ASCII character table, see https://www.ascii-code.com/.
+
+## Tests
+
+From the project root, run:
+
+```bash
+python -m unittest discover -s tests
+```
