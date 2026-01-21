@@ -21,9 +21,12 @@ class TestTextToBinary(unittest.TestCase):
 
     def test_del_character(self) -> None:
         self.assertEqual(text_to_binary("\x7f"), "01111111")
+        
+    def test_word(self) -> None:
+        self.assertEqual(text_to_binary("Josue"), "01001010 01101111 01110011 01110101 01100101")   
 
     def test_rejects_non_ascii(self) -> None:
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, r"Invalid character 'ñ'"):
             text_to_binary("ñ")
 
     def test_rejects_non_string(self) -> None:
