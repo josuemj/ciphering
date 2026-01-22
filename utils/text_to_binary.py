@@ -1,3 +1,10 @@
+import sys
+import os
+
+# Add parent directory to path for imports when running as script
+if __name__ == "__main__":
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from utils.number_to_binary import decimal_to_binary, decimal_to_binary_6
 
 # Manual ASCII dictionary mapping all ASCII characters (0-127) to their decimal values
@@ -95,7 +102,16 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 2:
-        print("Usage: python text_to_binary.py <text>")
+        print("Usage:")
+        print("  python text_to_binary.py <text>           # Convert ASCII text to binary")
+        print("  python text_to_binary.py --base64 <text>  # Convert Base64 to binary")
         raise SystemExit(2)
 
-    print(text_to_binary(" ".join(sys.argv[1:])))
+    # Check if --base64 flag is present
+    if sys.argv[1] == "--base64":
+        if len(sys.argv) < 3:
+            print("Error: --base64 requires a Base64 string")
+            raise SystemExit(2)
+        print(base64_to_binary(" ".join(sys.argv[2:])))
+    else:
+        print(text_to_binary(" ".join(sys.argv[1:])))
