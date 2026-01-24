@@ -5,27 +5,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .lang-switch {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 8px 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .lang-switch:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Vigenère Cipher Research</h1>
+    <button class="lang-switch" onclick="toggleLanguage()">🌐 Español</button>
 
-    <h2>What is the Vigenère Cipher?</h2>
+    <h1 data-en="Vigenère Cipher Research" data-es="Investigación del Cifrado Vigenère">Vigenère Cipher Research</h1>
+    <h2 data-en="What is the Vigenère Cipher?" data-es="¿Qué es el Cifrado Vigenère?">What is the Vigenère Cipher?</h2>
+    <p data-en="The Vigenère cipher uses multiple Caesar shifts arranged in the Vigenère table, which serves as the key for encrypting and decrypting messages."
+        data-es="El cifrado de Vigenère usa múltiples desplazamientos César organizados en la tabla de Vigenère, que funciona como la clave para cifrar y descifrar mensajes.">
+        The Vigenère cipher uses multiple Caesar shifts arranged in the Vigenère table, which serves as the key for encrypting and decrypting messages.
+    </p>
 
-    <h2>How does the Vigenère Cipher work?</h2>
+    <h2 data-en="How does the Vigenère Cipher work?" data-es="¿Cómo funciona el Cifrado Vigenère?">How does the Vigenère
+        Cipher work?</h2>
+    <p data-en="Think of it as a shifting code that changes with every letter; unlike a simple code where &quot;A&quot; always becomes &quot;D&quot;, the shift depends on the matching key letter, so the same plaintext letter can turn into different ciphertext letters."
+        data-es="Piensa en él como un código que cambia con cada letra; a diferencia de un código simple donde &quot;A&quot; siempre se vuelve &quot;D&quot;, el desplazamiento depende de la letra correspondiente de la clave, así que la misma letra del mensaje puede volverse diferentes letras cifradas.">
+        Think of it as a shifting code that changes with every letter; unlike a simple code where "A" always becomes "D", the shift depends on the matching key letter, so the same plaintext letter can turn into different ciphertext letters.
+    </p>
+    <p data-en="To use it, you need three things: a message, a key word, and the Vigenère square."
+        data-es="Para usarlo necesitas tres cosas: un mensaje, una palabra clave y el cuadrado de Vigenère.">
+        To use it, you need three things: a message, a key word, and the Vigenère square.
+    </p>
+    <ul>
+        <li data-en="Message: What you want to hide." data-es="Mensaje: Lo que quieres ocultar.">Message: What you want
+            to hide.</li>
+        <li data-en="Key: A secret word (like &quot;PIZZA&quot;) repeated to match the message length."
+            data-es="Clave: Una palabra secreta (como &quot;PIZZA&quot;) repetida para igualar la longitud del mensaje.">
+            Key: A secret word (like "PIZZA") repeated to match the message length.</li>
+        <li data-en="Vigenère square: A grid that lets you intersect the message letter and the key letter."
+            data-es="Cuadrado de Vigenère: Una cuadrícula que te permite intersectar la letra del mensaje y la letra de la clave.">
+            Vigenère square: A grid that lets you intersect the message letter and the key letter.</li>
+    </ul>
+    <p data-en="Process: write the key repeatedly over the message; for each position, use the row for the key letter and the column for the message letter on the square to get the cipher letter."
+        data-es="Proceso: escribe la clave repetidamente sobre el mensaje; para cada posición, usa en el cuadrado la fila de la letra de la clave y la columna de la letra del mensaje para obtener la letra cifrada.">
+        Process: write the key repeatedly over the message; for each position, use the row for the key letter and the column for the message letter on the square to get the cipher letter.
+    </p>
+    <p data-en="Source: Gemini" data-es="Fuente: Gemini">Source: Gemini</p>
 
-    <h2>Why I choose the Vigenère Cipher?</h2>
+    <h2 data-en="Why I choose the Vigenère Cipher?" data-es="¿Por qué elegí el Cifrado Vigenère?">Why I choose the
+        Vigenère Cipher?</h2>
+    <p data-en="I had not heard of it before, so I decided to research it and found its shifting mechanism interesting."
+        data-es="No lo había escuchado antes, así que decidí investigarlo y su mecanismo de desplazamientos me pareció interesante.">
+        I had not heard of it before, so I decided to research it and found its shifting mechanism interesting.
+    </p>
 
-    <h2>Application Sample</h2>
+    <h2 data-en="Application Sample" data-es="Ejemplo de Aplicación">Application Sample</h2>
+    <p data-en="Let's encrypt the word &quot;HOLA&quot; using the key &quot;SOL&quot;."
+        data-es="Cifremos la palabra &quot;HOLA&quot; usando la clave &quot;SOL&quot;.">
+        Let's encrypt the word "HOLA" using the key "SOL".
+    </p>
+    <ol>
+        <li data-en="Align the text: message H O L A; key S O L S (repeat the key)."
+            data-es="Alinea el texto: mensaje H O L A; clave S O L S (repite la clave).">
+            Align the text: message H O L A; key S O L S (repeat the key).</li>
+        <li data-en="Look up each pair on the square: H+S=Z, O+O=C, L+L=W, A+S=S."
+            data-es="Busca cada par en el cuadrado: H+S=Z, O+O=C, L+L=W, A+S=S.">
+            Look up each pair on the square: H+S=Z, O+O=C, L+L=W, A+S=S.</li>
+        <li data-en="Result: ZCWS." data-es="Resultado: ZCWS.">Result: ZCWS.</li>
+    </ol>
 
-    <h2>Advantages</h2>
+    <h2 data-en="Advantages" data-es="Ventajas">Advantages</h2>
 
-    <h2>Disadvantages / Vulnerabilities</h2>
+    <h2 data-en="Disadvantages / Vulnerabilities" data-es="Desventajas / Vulnerabilidades">Disadvantages /
+        Vulnerabilities</h2>
 
-    <h2>References</h2>
+    <h2 data-en="References" data-es="Referencias">References</h2>
+    <p data-en="Wikipedia contributors. (n.d.). Vigenère cipher. Retrieved January 22, 2026, from https://es.wikipedia.org/wiki/Cifrado_de_Vigen%C3%A8re"
+        data-es="Colaboradores de Wikipedia. (s.f.). Cifrado de Vigenère. Recuperado el 22 de enero de 2026, de https://es.wikipedia.org/wiki/Cifrado_de_Vigen%C3%A8re">
+        Wikipedia contributors. (n.d.). Vigenère cipher. Retrieved January 22, 2026, from
+        https://es.wikipedia.org/wiki/Cifrado_de_Vigen%C3%A8re</p>
 
-    <footer>By Josue Marroquin 22397 Universidad del Valle de Guatemala </footer>
+    <footer data-en="By Josue Marroquin 22397 Universidad del Valle de Guatemala"
+        data-es="Por Josue Marroquin 22397 Universidad del Valle de Guatemala">By Josue Marroquin 22397 Universidad del
+        Valle de Guatemala</footer>
+
+    <script>
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'es' : 'en';
+
+            // Update all elements with data attributes
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.textContent = el.getAttribute(`data-${currentLang}`);
+            });
+
+            // Update button text
+            const btn = document.querySelector('.lang-switch');
+            btn.textContent = currentLang === 'en' ? '🌐 Español' : '🌐 English';
+
+            // Update html lang attribute
+            document.documentElement.lang = currentLang;
+        }
+    </script>
 </body>
 
 </html>
