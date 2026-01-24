@@ -187,6 +187,163 @@
             letter-spacing: 0.2px;
         }
 
+        .v-demo {
+            margin-top: 12px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 16px;
+            background: #fff;
+            box-shadow: var(--shadow);
+        }
+
+        .v-demo-grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: 1fr;
+            align-items: start;
+        }
+
+        .v-demo-panel {
+            display: grid;
+            gap: 10px;
+        }
+
+        .strip-label {
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .label-strip {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px;
+            align-items: center;
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--accent-soft);
+        }
+
+        .label-chip {
+            background: #fff;
+            color: var(--ink);
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            padding: 6px 10px;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: inset 0 0 0 1px rgba(124, 93, 255, 0.08);
+        }
+
+        .letter-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .strip-letter {
+            min-width: 38px;
+            text-align: center;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: #fff;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .strip-letter.active {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 10px 20px rgba(124, 93, 255, 0.28);
+            transform: translateY(-2px);
+        }
+
+        .strip-letter.done {
+            background: #e3f2ff;
+            border-color: rgba(91, 139, 255, 0.5);
+            color: var(--ink);
+        }
+
+        .strip-letter.result {
+            border-style: dashed;
+            opacity: 0.85;
+        }
+
+        .strip-letter.final {
+            background: #16a34a;
+            color: #fff;
+            border-color: #0f9a42;
+            box-shadow: 0 10px 20px rgba(22, 163, 74, 0.28);
+        }
+
+        .v-table-shell {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: inset 0 1px 0 #f8fafc, 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        .v-square {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .v-square thead th {
+            background: linear-gradient(120deg, #ede9ff, #e0f2fe);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .v-square th,
+        .v-square td {
+            border: 1px solid var(--line);
+            text-align: center;
+            padding: 6px 8px;
+            color: var(--ink);
+        }
+
+        .v-square tbody th {
+            background: #f8fafc;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+
+        .v-square td.row-active,
+        .v-square th.row-active {
+            background: #f3f0ff;
+        }
+
+        .v-square td.col-active,
+        .v-square th.col-active {
+            background: #e7f2ff;
+        }
+
+        .v-square td.cell-active {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .v-square td.cell-final {
+            background: #16a34a;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .demo-note {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
         @media (max-width: 640px) {
             .card {
                 padding: 20px;
@@ -302,6 +459,47 @@
                         Look up each pair on the square: H+S=Z, O+O=C, L+L=W, A+S=S.</li>
                     <li data-en="Result: ZCWS." data-es="Resultado: ZCWS.">Result: ZCWS.</li>
                 </ol>
+                <div class="v-demo" aria-label="Animated Vigenère table demo">
+                    <div class="strip-label" data-en="Animated lookup" data-es="Búsqueda animada">Animated lookup</div>
+                    <div class="v-demo-grid">
+                        <div class="v-demo-panel">
+                            <div class="label-strip">
+                                <span class="label-chip" data-en="Plaintext" data-es="Mensaje">Plaintext</span>
+                                <div class="letter-row strip-plain">
+                                    <span class="strip-letter" data-index="0">H</span>
+                                    <span class="strip-letter" data-index="1">O</span>
+                                    <span class="strip-letter" data-index="2">L</span>
+                                    <span class="strip-letter" data-index="3">A</span>
+                                </div>
+                            </div>
+                            <div class="label-strip">
+                                <span class="label-chip" data-en="Key" data-es="Clave">Key</span>
+                                <div class="letter-row strip-key">
+                                    <span class="strip-letter" data-index="0">S</span>
+                                    <span class="strip-letter" data-index="1">O</span>
+                                    <span class="strip-letter" data-index="2">L</span>
+                                    <span class="strip-letter" data-index="3">S</span>
+                                </div>
+                            </div>
+                            <div class="label-strip">
+                                <span class="label-chip" data-en="Result" data-es="Resultado">Result</span>
+                                <div class="letter-row strip-result">
+                                    <span class="strip-letter result" data-index="0" data-letter="Z"></span>
+                                    <span class="strip-letter result" data-index="1" data-letter="C"></span>
+                                    <span class="strip-letter result" data-index="2" data-letter="W"></span>
+                                    <span class="strip-letter result" data-index="3" data-letter="S"></span>
+                                </div>
+                            </div>
+                            <p class="demo-note" data-en="Animation repeats automatically and highlights the intersection cells on the table."
+                                data-es="La animación se repite automáticamente y resalta las celdas de intersección en la tabla.">
+                                Animation repeats automatically and highlights the intersection cells on the table.
+                            </p>
+                        </div>
+                        <div class="v-table-shell">
+                            <div id="v-table"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -375,6 +573,163 @@
 
             document.documentElement.lang = currentLang;
         }
+
+        // Build Vigenère table
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        const tableContainer = document.getElementById('v-table');
+
+        function buildVigenereTable() {
+            const table = document.createElement('table');
+            table.className = 'v-square';
+
+            const thead = document.createElement('thead');
+            const headRow = document.createElement('tr');
+            headRow.appendChild(document.createElement('th'));
+            letters.forEach(letter => {
+                const th = document.createElement('th');
+                th.textContent = letter;
+                th.dataset.colHeader = letter;
+                headRow.appendChild(th);
+            });
+            thead.appendChild(headRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            letters.forEach((rowLetter, rowIdx) => {
+                const tr = document.createElement('tr');
+                const rowHead = document.createElement('th');
+                rowHead.textContent = rowLetter;
+                rowHead.dataset.rowHeader = rowLetter;
+                tr.appendChild(rowHead);
+
+                letters.forEach((colLetter, colIdx) => {
+                    const td = document.createElement('td');
+                    const cipherLetter = letters[(rowIdx + colIdx) % 26];
+                    td.textContent = cipherLetter;
+                    td.dataset.row = rowLetter;
+                    td.dataset.col = colLetter;
+                    td.dataset.value = cipherLetter;
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            tableContainer.innerHTML = '';
+            tableContainer.appendChild(table);
+            return table;
+        }
+
+        const tableElement = buildVigenereTable();
+
+        // Animation data
+        const plainSeq = ['H', 'O', 'L', 'A'];
+        const keySeq = ['S', 'O', 'L', 'S'];
+        const cipherSeq = ['Z', 'C', 'W', 'S'];
+
+        const plainLetters = Array.from(document.querySelectorAll('.strip-plain .strip-letter'));
+        const keyLetters = Array.from(document.querySelectorAll('.strip-key .strip-letter'));
+        const resultLetters = Array.from(document.querySelectorAll('.strip-result .strip-letter'));
+        const intersections = plainSeq.map((plain, idx) => tableElement.querySelector(`td[data-row="${keySeq[idx]}"][data-col="${plain}"]`));
+
+        let demoTimer = null;
+
+        function clearTableHighlights() {
+            tableElement.querySelectorAll('.row-active, .col-active, .cell-active, .cell-final, th.row-active, th.col-active').forEach(el => {
+                el.classList.remove('row-active', 'col-active', 'cell-active', 'cell-final');
+            });
+        }
+
+        function resetDemo() {
+            if (demoTimer) {
+                clearTimeout(demoTimer);
+            }
+            clearTableHighlights();
+            plainLetters.forEach(el => el.classList.remove('active', 'done'));
+            keyLetters.forEach(el => el.classList.remove('active', 'done'));
+            resultLetters.forEach(el => {
+                el.classList.remove('active', 'done', 'final');
+                el.textContent = '';
+            });
+            document.querySelectorAll('th.row-active, th.col-active').forEach(el => {
+                el.classList.remove('row-active', 'col-active');
+            });
+        }
+
+        function highlightHeaders(rowLetter, colLetter) {
+            const rowHeader = tableElement.querySelector(`th[data-row-header="${rowLetter}"]`);
+            const colHeader = tableElement.querySelector(`th[data-col-header="${colLetter}"]`);
+            if (rowHeader) rowHeader.classList.add('row-active');
+            if (colHeader) colHeader.classList.add('col-active');
+        }
+
+        function highlightStep(step) {
+            clearTableHighlights();
+
+            const plainLetter = plainSeq[step];
+            const keyLetter = keySeq[step];
+
+            plainLetters.forEach((el, idx) => {
+                el.classList.toggle('active', idx === step);
+                el.classList.toggle('done', idx < step);
+            });
+            keyLetters.forEach((el, idx) => {
+                el.classList.toggle('active', idx === step);
+                el.classList.toggle('done', idx < step);
+            });
+            resultLetters.forEach((el, idx) => {
+                if (idx <= step) {
+                    el.textContent = cipherSeq[idx];
+                    el.classList.add(idx === step ? 'active' : 'done');
+                } else {
+                    el.textContent = '';
+                    el.classList.remove('active', 'done', 'final');
+                }
+            });
+
+            tableElement.querySelectorAll(`td[data-row="${keyLetter}"]`).forEach(td => td.classList.add('row-active'));
+            tableElement.querySelectorAll(`td[data-col="${plainLetter}"]`).forEach(td => td.classList.add('col-active'));
+
+            const cell = tableElement.querySelector(`td[data-row="${keyLetter}"][data-col="${plainLetter}"]`);
+            if (cell) cell.classList.add('cell-active');
+            highlightHeaders(keyLetter, plainLetter);
+        }
+
+        function showFinal() {
+            clearTableHighlights();
+            intersections.forEach(cell => cell && cell.classList.add('cell-final'));
+            plainLetters.forEach(el => el.classList.remove('active'));
+            keyLetters.forEach(el => el.classList.remove('active'));
+            resultLetters.forEach((el, idx) => {
+                el.textContent = cipherSeq[idx];
+                el.classList.remove('active');
+                el.classList.add('done', 'final');
+            });
+        }
+
+        function playDemo() {
+            resetDemo();
+            let step = 0;
+
+            const run = () => {
+                if (step < plainSeq.length) {
+                    highlightStep(step);
+                    step += 1;
+                    demoTimer = setTimeout(run, 1500);
+                } else {
+                    showFinal();
+                    demoTimer = setTimeout(() => {
+                        resetDemo();
+                        step = 0;
+                        run();
+                    }, 1800);
+                }
+            };
+
+            run();
+        }
+
+        playDemo();
     </script>
 </body>
 
