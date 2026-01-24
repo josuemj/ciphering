@@ -4,23 +4,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Vigenère Cipher Research</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #f7f8fc;
+            --panel: #ffffff;
+            --ink: #0f172a;
+            --muted: #475569;
+            --accent: #7c5dff;
+            --accent-soft: #ede9ff;
+            --line: #e2e8f0;
+            --shadow: 0 15px 40px rgba(21, 23, 58, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Sora', 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at 20% 20%, #eef2ff, transparent 22%),
+                radial-gradient(circle at 80% 0%, #e0f2fe, transparent 26%),
+                var(--bg);
+            color: var(--ink);
+            line-height: 1.7;
+        }
+
+        .page {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 48px 22px 72px;
+        }
+
         .lang-switch {
             position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 8px 16px;
+            top: 16px;
+            right: 16px;
+            padding: 10px 18px;
             cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
+            background: linear-gradient(120deg, var(--accent), #5b8bff);
+            color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            box-shadow: 0 10px 25px rgba(124, 93, 255, 0.3);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
 
         .lang-switch:hover {
-            background-color: #45a049;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 28px rgba(124, 93, 255, 0.35);
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 24px 26px 28px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card+.card {
+            margin-top: 20px;
+        }
+
+        .hero {
+            padding: 30px 30px 32px;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 15% 20%, rgba(124, 93, 255, 0.14), transparent 36%),
+                radial-gradient(circle at 85% 25%, rgba(91, 139, 255, 0.14), transparent 32%);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--accent-soft);
+            color: var(--ink);
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .hero-title {
+            margin: 14px 0 8px;
+            font-size: 32px;
+            letter-spacing: -0.5px;
+        }
+
+        .lead {
+            margin: 0;
+            color: var(--muted);
+            max-width: 720px;
+        }
+
+        .section-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border: 1px solid var(--line);
+            background: var(--accent-soft);
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 1px rgba(124, 93, 255, 0.08);
+            font-size: 20px;
+            letter-spacing: -0.2px;
+            margin: 0 0 14px;
+            position: relative;
+        }
+
+        .section-title::before {
+            content: "";
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
+            border-radius: 4px;
+            box-shadow: 0 6px 18px rgba(124, 93, 255, 0.35);
+        }
+
+        .section-body {
+            color: var(--muted);
+            display: grid;
+            gap: 12px;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .tagged-list li::marker {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .reference-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .reference-list li+li {
+            margin-top: 10px;
+        }
+
+        .reference-list a {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(124, 93, 255, 0.25);
+        }
+
+        .reference-list a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 28px;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 20px;
+            }
+
+            .hero-title {
+                font-size: 26px;
+            }
+
+            .lang-switch {
+                top: 12px;
+                right: 12px;
+            }
         }
     </style>
 </head>
@@ -29,75 +208,157 @@
 
     <button class="lang-switch" onclick="toggleLanguage()">🌐 Español</button>
 
-    <h1 data-en="Vigenère Cipher Research" data-es="Investigación del Cifrado Vigenère">Vigenère Cipher Research</h1>
-    <h2 data-en="What is the Vigenère Cipher?" data-es="¿Qué es el Cifrado Vigenère?">What is the Vigenère Cipher?</h2>
-    <p data-en="The Vigenère cipher uses multiple Caesar shifts arranged in the Vigenère table, which serves as the key for encrypting and decrypting messages."
-        data-es="El cifrado de Vigenère usa múltiples desplazamientos César organizados en la tabla de Vigenère, que funciona como la clave para cifrar y descifrar mensajes.">
-        The Vigenère cipher uses multiple Caesar shifts arranged in the Vigenère table, which serves as the key for encrypting and decrypting messages.
-    </p>
+    <main class="page">
+        <header class="hero card">
+            <div class="eyebrow" data-en="Cryptography research brief"
+                data-es="Resumen de investigación en criptografía">
+                Cryptography research brief
+            </div>
+            <h1 class="hero-title" data-en="Vigenère Cipher Research" data-es="Investigación del Cifrado Vigenère">
+                Vigenère Cipher Research
+            </h1>
+        </header>
 
-    <h2 data-en="How does the Vigenère Cipher work?" data-es="¿Cómo funciona el Cifrado Vigenère?">How does the Vigenère
-        Cipher work?</h2>
-    <p data-en="Think of it as a shifting code that changes with every letter; unlike a simple code where &quot;A&quot; always becomes &quot;D&quot;, the shift depends on the matching key letter, so the same plaintext letter can turn into different ciphertext letters."
-        data-es="Piensa en él como un código que cambia con cada letra; a diferencia de un código simple donde &quot;A&quot; siempre se vuelve &quot;D&quot;, el desplazamiento depende de la letra correspondiente de la clave, así que la misma letra del mensaje puede volverse diferentes letras cifradas.">
-        Think of it as a shifting code that changes with every letter; unlike a simple code where "A" always becomes "D", the shift depends on the matching key letter, so the same plaintext letter can turn into different ciphertext letters.
-    </p>
-    <p data-en="To use it, you need three things: a message, a key word, and the Vigenère square."
-        data-es="Para usarlo necesitas tres cosas: un mensaje, una palabra clave y el cuadrado de Vigenère.">
-        To use it, you need three things: a message, a key word, and the Vigenère square.
-    </p>
-    <ul>
-        <li data-en="Message: What you want to hide." data-es="Mensaje: Lo que quieres ocultar.">Message: What you want
-            to hide.</li>
-        <li data-en="Key: A secret word (like &quot;PIZZA&quot;) repeated to match the message length."
-            data-es="Clave: Una palabra secreta (como &quot;PIZZA&quot;) repetida para igualar la longitud del mensaje.">
-            Key: A secret word (like "PIZZA") repeated to match the message length.</li>
-        <li data-en="Vigenère square: A grid that lets you intersect the message letter and the key letter."
-            data-es="Cuadrado de Vigenère: Una cuadrícula que te permite intersectar la letra del mensaje y la letra de la clave.">
-            Vigenère square: A grid that lets you intersect the message letter and the key letter.</li>
-    </ul>
-    <p data-en="Process: write the key repeatedly over the message; for each position, use the row for the key letter and the column for the message letter on the square to get the cipher letter."
-        data-es="Proceso: escribe la clave repetidamente sobre el mensaje; para cada posición, usa en el cuadrado la fila de la letra de la clave y la columna de la letra del mensaje para obtener la letra cifrada.">
-        Process: write the key repeatedly over the message; for each position, use the row for the key letter and the column for the message letter on the square to get the cipher letter.
-    </p>
-    <p data-en="Source: Gemini" data-es="Fuente: Gemini">Source: Gemini</p>
+        <section class="card">
+            <h2 class="section-title" data-en="What is the Vigenère Cipher?" data-es="¿Qué es el Cifrado Vigenère?">What
+                is the Vigenère Cipher?</h2>
+            <div class="section-body">
+                <p data-en="The Vigenère cipher uses multiple Caesar shifts arranged in the Vigenère table, which serves as the key for encrypting and decrypting messages."
+                    data-es="El cifrado de Vigenère usa múltiples desplazamientos César organizados en la tabla de Vigenère, que funciona como la clave para cifrar y descifrar mensajes.">
+                    The Vigenère cipher uses multiple Caesar shifts arranged in the Vigenère table, which serves as the
+                    key for encrypting and decrypting messages.
+                </p>
+                <img src="image.png" alt="Vigenère Square"
+                    style="width:100%;border-radius:8px;box-shadow:0 8px 24px rgba(21,23,58,0.12);">
+                <p data-en="It is a classic example of polyalphabetic substitution, increasing complexity by changing the shift based on the key word."
+                    data-es="Es un ejemplo clásico de sustitución polialfabética, que aumenta la complejidad al cambiar el desplazamiento según la palabra clave.">
+                    It is a classic example of polyalphabetic substitution, increasing complexity by changing the shift
+                    based on the key word.
+                </p>
+            </div>
+        </section>
 
-    <h2 data-en="Why I choose the Vigenère Cipher?" data-es="¿Por qué elegí el Cifrado Vigenère?">Why I choose the
-        Vigenère Cipher?</h2>
-    <p data-en="I had not heard of it before, so I decided to research it and found its shifting mechanism interesting."
-        data-es="No lo había escuchado antes, así que decidí investigarlo y su mecanismo de desplazamientos me pareció interesante.">
-        I had not heard of it before, so I decided to research it and found its shifting mechanism interesting.
-    </p>
+        <section class="card">
+            <h2 class="section-title" data-en="How does the Vigenère Cipher work?"
+                data-es="¿Cómo funciona el Cifrado Vigenère?">
+                How does the Vigenère Cipher work?</h2>
+            <div class="section-body">
+                <p data-en="Think of it as a shifting code that changes with every letter; unlike a simple code where &quot;A&quot; always becomes &quot;D&quot;, the shift depends on the matching key letter, so the same plaintext letter can turn into different ciphertext letters."
+                    data-es="Piensa en él como un código que cambia con cada letra; a diferencia de un código simple donde &quot;A&quot; siempre se vuelve &quot;D&quot;, el desplazamiento depende de la letra correspondiente de la clave, así que la misma letra del mensaje puede volverse diferentes letras cifradas.">
+                    Think of it as a shifting code that changes with every letter; unlike a simple code where "A" always
+                    becomes "D", the shift depends on the matching key letter, so the same plaintext letter can turn
+                    into different ciphertext letters.
+                </p>
+                <p data-en="To use it, you need three things: a message, a key word, and the Vigenère square."
+                    data-es="Para usarlo necesitas tres cosas: un mensaje, una palabra clave y el cuadrado de Vigenère.">
+                    To use it, you need three things: a message, a key word, and the Vigenère square.
+                </p>
+                <ul class="tagged-list">
+                    <li data-en="Message: what you want to hide." data-es="Mensaje: lo que quieres ocultar.">Message:
+                        what you want to hide.</li>
+                    <li data-en="Key: a secret word (like &quot;PIZZA&quot;) repeated to match the message length."
+                        data-es="Clave: una palabra secreta (como &quot;PIZZA&quot;) repetida para igualar la longitud del mensaje.">
+                        Key: a secret word (like "PIZZA") repeated to match the message length.</li>
+                    <li data-en="Vigenère square: a grid that lets you intersect the message letter and the key letter."
+                        data-es="Cuadrado de Vigenère: una cuadrícula que te permite intersectar la letra del mensaje y la letra de la clave.">
+                        Vigenère square: a grid that lets you intersect the message letter and the key letter.</li>
+                </ul>
+                <p data-en="Process: write the key repeatedly over the message; for each position, use the row for the key letter and the column for the message letter on the square to get the cipher letter."
+                    data-es="Proceso: escribe la clave repetidamente sobre el mensaje; para cada posición, usa en el cuadrado la fila de la letra de la clave y la columna de la letra del mensaje para obtener la letra cifrada.">
+                    Process: write the key repeatedly over the message; for each position, use the row for the key
+                    letter
+                    and the column for the message letter on the square to get the cipher letter.
+                </p>
+            </div>
+        </section>
 
-    <h2 data-en="Application Sample" data-es="Ejemplo de Aplicación">Application Sample</h2>
-    <p data-en="Let's encrypt the word &quot;HOLA&quot; using the key &quot;SOL&quot;."
-        data-es="Cifremos la palabra &quot;HOLA&quot; usando la clave &quot;SOL&quot;.">
-        Let's encrypt the word "HOLA" using the key "SOL".
-    </p>
-    <ol>
-        <li data-en="Align the text: message H O L A; key S O L S (repeat the key)."
-            data-es="Alinea el texto: mensaje H O L A; clave S O L S (repite la clave).">
-            Align the text: message H O L A; key S O L S (repeat the key).</li>
-        <li data-en="Look up each pair on the square: H+S=Z, O+O=C, L+L=W, A+S=S."
-            data-es="Busca cada par en el cuadrado: H+S=Z, O+O=C, L+L=W, A+S=S.">
-            Look up each pair on the square: H+S=Z, O+O=C, L+L=W, A+S=S.</li>
-        <li data-en="Result: ZCWS." data-es="Resultado: ZCWS.">Result: ZCWS.</li>
-    </ol>
+        <section class="card">
+            <h2 class="section-title" data-en="Why I choose the Vigenère Cipher?"
+                data-es="¿Por qué elegí el Cifrado Vigenère?">
+                Why I choose the Vigenère Cipher?</h2>
+            <div class="section-body">
+                <p data-en="I had not heard of it before, so I decided to research it and found its shifting mechanism interesting."
+                    data-es="No lo había escuchado antes, así que decidí investigarlo y su mecanismo de desplazamientos me pareció interesante.">
+                    I had not heard of it before, so I decided to research it and found its shifting mechanism
+                    interesting.
+                </p>
+            </div>
+        </section>
 
-    <h2 data-en="Advantages" data-es="Ventajas">Advantages</h2>
+        <section class="card">
+            <h2 class="section-title" data-en="Application Sample" data-es="Ejemplo de Aplicación">Application Sample
+            </h2>
+            <div class="section-body">
+                <p data-en="Let's encrypt the word &quot;HOLA&quot; using the key &quot;SOL&quot;."
+                    data-es="Cifremos la palabra &quot;HOLA&quot; usando la clave &quot;SOL&quot;.">
+                    Let's encrypt the word "HOLA" using the key "SOL".
+                </p>
+                <ol class="tagged-list">
+                    <li data-en="Align the text: message H O L A; key S O L S (repeat the key)."
+                        data-es="Alinea el texto: mensaje H O L A; clave S O L S (repite la clave).">
+                        Align the text: message H O L A; key S O L S (repeat the key).</li>
+                    <li data-en="Look up each pair on the square: H+S=Z, O+O=C, L+L=W, A+S=S."
+                        data-es="Busca cada par en el cuadrado: H+S=Z, O+O=C, L+L=W, A+S=S.">
+                        Look up each pair on the square: H+S=Z, O+O=C, L+L=W, A+S=S.</li>
+                    <li data-en="Result: ZCWS." data-es="Resultado: ZCWS.">Result: ZCWS.</li>
+                </ol>
+            </div>
+        </section>
 
-    <h2 data-en="Disadvantages / Vulnerabilities" data-es="Desventajas / Vulnerabilidades">Disadvantages /
-        Vulnerabilities</h2>
+        <section class="card">
+            <h2 class="section-title" data-en="Advantages" data-es="Ventajas">Advantages</h2>
+            <div class="section-body">
+                <ul class="tagged-list">
+                    <li data-en="Polyalphabetic shifts reduce simple frequency analysis when the key is long enough."
+                        data-es="Los desplazamientos polialfabéticos reducen el análisis de frecuencia simple cuando la clave es lo suficientemente larga.">
+                        Polyalphabetic shifts reduce simple frequency analysis when the key is long enough.</li>
+                    <li data-en="Easy to teach and reproduce with pencil-and-paper methods."
+                        data-es="Es fácil de enseñar y reproducir con métodos de lápiz y papel.">
+                        Easy to teach and reproduce with pencil-and-paper methods.</li>
+                    <li data-en="Serves as a bridge to modern stream and block ciphers in historical courses."
+                        data-es="Sirve como puente hacia cifradores de flujo y bloque modernos en cursos históricos.">
+                        Serves as a bridge to modern stream and block ciphers in historical courses.</li>
+                </ul>
+            </div>
+        </section>
 
-    <h2 data-en="References" data-es="Referencias">References</h2>
-    <p data-en="Wikipedia contributors. (n.d.). Vigenère cipher. Retrieved January 22, 2026, from https://es.wikipedia.org/wiki/Cifrado_de_Vigen%C3%A8re"
-        data-es="Colaboradores de Wikipedia. (s.f.). Cifrado de Vigenère. Recuperado el 22 de enero de 2026, de https://es.wikipedia.org/wiki/Cifrado_de_Vigen%C3%A8re">
-        Wikipedia contributors. (n.d.). Vigenère cipher. Retrieved January 22, 2026, from
-        https://es.wikipedia.org/wiki/Cifrado_de_Vigen%C3%A8re</p>
+        <section class="card">
+            <h2 class="section-title" data-en="Disadvantages / Vulnerabilities"
+                data-es="Desventajas / Vulnerabilidades">Disadvantages / Vulnerabilities</h2>
+            <div class="section-body">
+                <ul class="tagged-list">
+                    <li data-en="Repeated keys leak patterns, enabling Kasiski or index-of-coincidence attacks."
+                        data-es="Las claves repetidas filtran patrones, lo que permite ataques de Kasiski o de índice de coincidencia.">
+                        Repeated keys leak patterns, enabling Kasiski or index-of-coincidence attacks.</li>
+                    <li data-en="Security depends heavily on key length and secrecy; short keys are weak."
+                        data-es="La seguridad depende mucho de la longitud y el secreto de la clave; las claves cortas son débiles.">
+                        Security depends heavily on key length and secrecy; short keys are weak.</li>
+                    <li data-en="Modern computers can recover keys quickly if enough ciphertext is available."
+                        data-es="Las computadoras modernas pueden recuperar claves rápidamente si hay suficiente texto cifrado.">
+                        Modern computers can recover keys quickly if enough ciphertext is available.</li>
+                </ul>
+            </div>
+        </section>
 
-    <footer data-en="By Josue Marroquin 22397 Universidad del Valle de Guatemala"
-        data-es="Por Josue Marroquin 22397 Universidad del Valle de Guatemala">By Josue Marroquin 22397 Universidad del
-        Valle de Guatemala</footer>
+        <section class="card">
+            <h2 class="section-title" data-en="References" data-es="Referencias">References</h2>
+            <div class="section-body">
+                <ul class="reference-list">
+                    <li><a href="https://es.wikipedia.org/wiki/Cifrado_de_Vigen%C3%A8re" target="_blank"
+                            rel="noreferrer" data-en="Wikipedia (ES) entry on the Vigenère cipher"
+                            data-es="Artículo de Wikipedia (ES) sobre el cifrado Vigenère">Wikipedia (ES) entry on the
+                            Vigenère cipher</a></li>
+                    <li data-en="Source: Gemini" data-es="Fuente: Gemini">Source: Gemini</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p data-en="By Josue Marroquin 22397 Universidad del Valle de Guatemala"
+                data-es="Por Josue Marroquin 22397 Universidad del Valle de Guatemala">By Josue Marroquin 22397
+                Universidad del Valle de Guatemala</p>
+        </footer>
+    </main>
 
     <script>
         let currentLang = 'en';
@@ -105,16 +366,13 @@
         function toggleLanguage() {
             currentLang = currentLang === 'en' ? 'es' : 'en';
 
-            // Update all elements with data attributes
             document.querySelectorAll('[data-en]').forEach(el => {
                 el.textContent = el.getAttribute(`data-${currentLang}`);
             });
 
-            // Update button text
             const btn = document.querySelector('.lang-switch');
             btn.textContent = currentLang === 'en' ? '🌐 Español' : '🌐 English';
 
-            // Update html lang attribute
             document.documentElement.lang = currentLang;
         }
     </script>
