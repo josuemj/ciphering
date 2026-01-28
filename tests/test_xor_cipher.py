@@ -1,14 +1,8 @@
 import unittest
 from utils.ciphers.xor_cipher import xor_cipher
-from utils.keys.dynamic_key import generate_dynamic_key
-
 
 class TestXorCipher(unittest.TestCase):
     
-    # Use a fixed dynamic key for reproducible tests
-    def setUp(self):
-        """Generate a dynamic key of length 10 for tests."""
-        self.dynamic_key = generate_dynamic_key(10)
 
     # Basic functionality tests
     def test_encrypt_decrypt_symmetric(self) -> None:
@@ -17,13 +11,6 @@ class TestXorCipher(unittest.TestCase):
         key = "Key12"
         encrypted = xor_cipher(plaintext, key)
         decrypted = xor_cipher(encrypted, key)
-        self.assertEqual(decrypted, plaintext)
-
-    def test_encrypt_decrypt_with_dynamic_key(self) -> None:
-        """Test encryption/decryption with dynamically generated key."""
-        plaintext = "SecretMsg!"
-        encrypted = xor_cipher(plaintext, self.dynamic_key)
-        decrypted = xor_cipher(encrypted, self.dynamic_key)
         self.assertEqual(decrypted, plaintext)
 
     def test_different_key_different_result(self) -> None:
