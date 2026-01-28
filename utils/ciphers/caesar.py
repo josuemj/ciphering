@@ -26,3 +26,20 @@ def caesar_encrypt(text : str, shift: int, alphabet : list) -> str:
             result += char
         
     return result
+
+def caesar_decrypt(text : str, shift: int, alphabet : list) -> str:
+    
+    """
+    Decrypts a given text using the Caesar cipher method.
+    Parameters:
+    - text (str): The input text to be decrypted.
+    - shift (int): The number of positions to shift each character in the alphabet.
+    - alphabet (list): The list of characters representing the alphabet to be used.
+    Returns:
+    - str: The resulting decrypted text.
+    
+    sample usage:
+    >>> caesar_decrypt("khoor", 3, list("abcdefghijklmnopqrstuvwxyz"))
+    'hello'
+    """
+    return caesar_encrypt(text, -shift, alphabet)
