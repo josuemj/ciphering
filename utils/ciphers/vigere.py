@@ -1,5 +1,6 @@
 def vigere(text: str, key: str, alphabet: list) -> str:
     n = len(text)
+    N = len(alphabet)
     key_length = len(key)
     result = ""
     if key_length == n:
@@ -12,7 +13,13 @@ def vigere(text: str, key: str, alphabet: list) -> str:
         key = key[:n]
             
     for i in range(len(text)):
-        ciphered_char = (alphabet.index(text[i]) + alphabet.index(key[i % len(key)])) % len(alphabet)
+        
+        p_i = alphabet.index(text[i])
+        
+        k_i_mid_k = alphabet.index(key[i % len(key)])
+        
+        ciphered_char = (p_i + k_i_mid_k) % N
+        
         result += alphabet[ciphered_char]
     return result
 
