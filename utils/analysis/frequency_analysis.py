@@ -31,3 +31,13 @@ def frequency_analysis(text: str) -> dict:
             else:
                 frequency[char] = 1
     return frequency
+
+# Example usage
+
+phrase = "The library was silent except for the faint, rhythmic turning of pages. Students sat hunched over weathered books, deep in thought as they prepared for their final exams. A single shaft of light pierced through the tall, dusty windows, illuminating dancing specks of dust that seemed to move in time with the quiet scratching of pencils. Outside, the world continued its frantic pace, but within these walls, time felt suspended in a sea of ink and parchment."
+
+caesar_shifted_phrase = caesar_encrypt(phrase, 3, list("abcdefghijklmnopqrstuvwxyz "))
+
+print("Original Phrase Frequency Analysis:")
+
+print(frequency_analysis(phrase))
