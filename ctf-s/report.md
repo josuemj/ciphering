@@ -22,4 +22,38 @@ Flag encontrada:
 - Bandera: `/home/hacker/.flag.txt`
 
 ### Imagen
-![Evidencia](img/challenge-1.png)
+![Imagen del proceso de búsqueda y extracción de la flag](img/challenge-1.png)
+
+## Desafío 2: Codificación Base64
+
+### Objetivo
+Identificar y decodificar cadenas Base64 para revelar una flag.
+
+### Proceso realizado
+1. Se ingresó al contenedor `challenge2_ctf` y se observó el mensaje indicando usar la flag del Desafío 1 para iniciar sesión como `hacker`.
+2. Se cambió de usuario con `su - hacker` usando como contraseña `FLAG{LINUX_BASICS}`.
+3. Se realizó la búsqueda de candidatos Base64 en las carpetas:
+   - `/challenge2` y `/home/hacker`
+
+```bash
+# Extraer tokens con caracteres típicos de Base64 y longitud mínima
+grep -RIsoh --binary-files=without-match -E "[A-Za-z0-9+/]{20,}={0,2}" /challenge2 /home/hacker 2>/dev/null \
+  | sort -u > /tmp/b64tok.txt
+nl -ba /tmp/b64tok.txt
+```
+
+4. De los resultados, se identificó el candidato:
+   - `RkxBR3tCQVNFNjRfREVTQ0lGUkFET30K`
+5. Se decodificó con `echo 'RkxBR3tCQVNFNjRfREVTQ0lGUkFET30K' | base64 -d`.
+
+### Resultado
+Flag encontrada:
+
+`FLAG{BASE64_DESCIFRADO}`
+
+### Evidencia
+- Cadena Base64: `RkxBR3tCQVNFNjRfREVTQ0lGUkFET30K`
+- Decodificación: `echo 'RkxBR3tCQVNFNjRfREVTQ0lGUkFET30K' | base64 -d`
+
+### Imagen
+![Imagen del proceso de búsqueda y decodificación de la flag](img/challenge-2.png)
