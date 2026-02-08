@@ -96,3 +96,46 @@ Flags encontradas:
 
 ### Imagen
 ![Imagen del proceso de búsqueda de la flag en el Desafío 3](img/challenge-3.png)
+
+## Desafío 4: Análisis de Frecuencia (César)
+
+### Objetivo
+Descifrar un mensaje usando análisis de frecuencia para encontrar una flag.
+
+### Proceso realizado
+1. Se ingresó al contenedor `challenge4_ctf` y se identificó un archivo protegido:
+   - `/home/hacker/cifrado_frecuencia.zip`
+2. Se listó el contenido del zip y se detectó que requería contraseña:
+
+```bash
+unzip -l /home/hacker/cifrado_frecuencia.zip
+```
+
+3. Se probó con contraseñas probables (flags anteriores) y funcionó:
+   - Contraseña del zip: `FLAG{SECRET_FLAG_ROOT13}`
+4. Se extrajo el archivo del zip:
+
+```bash
+unzip -P 'FLAG{SECRET_FLAG_ROOT13}' -o /home/hacker/cifrado_frecuencia.zip -d /tmp/ch4
+```
+
+5. Se obtuvo el texto cifrado desde:
+   - `/tmp/ch4/home/hacker/cifrado_frecuencia.txt`
+6. Se aplicó César y se encontró el desplazamiento correcto (shift 19). Para descifrar:
+
+```bash
+cat /tmp/ch4/home/hacker/cifrado_frecuencia.txt | tr 'A-Za-z' 'T-ZA-St-za-s'
+```
+
+### Resultado
+Flag encontrada:
+
+`FLAG{CRYPTO_ANALYSIS}`
+
+### Evidencia
+- Zip: `/home/hacker/cifrado_frecuencia.zip`
+- Password del zip: `FLAG{SECRET_FLAG_ROOT13}`
+- Archivo extraído: `/tmp/ch4/home/hacker/cifrado_frecuencia.txt`
+
+### Imagen
+![Imagen del proceso de búsqueda de la flag en el Desafío 4](img/challenge-4.png)   
