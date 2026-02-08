@@ -9,7 +9,7 @@ Encontrar flags ocultas en archivos del sistema, logs y configuraciones dentro d
 3. Se encontró una credencial en `/etc/hidden_config.txt`:
    - `Contraseña: LinuxForHackers`
 4. Se cambió a `hacker` con `su - hacker` usando esa contraseña.
-5. En `/home/hacker` se localizaron archivos ocultos y se detectó `.flag.txt`.
+5. En `/home/hacker` se localizó `.flag.txt`.
 6. Se extrajo la bandera desde `/home/hacker/.flag.txt`.
 
 ### Resultado
@@ -20,9 +20,7 @@ Flag encontrada:
 ### Evidencia
 - Credencial: `/etc/hidden_config.txt`
 - Bandera: `/home/hacker/.flag.txt`
-
-### Imagen
-![Imagen del proceso de búsqueda y extracción de la flag](img/challenge-1.png)
+![Imagen del proceso de búsqueda de la flag en el Desafío 1](img/challenge-1.png)
 
 ## Desafío 2: Codificación Base64
 
@@ -44,7 +42,11 @@ nl -ba /tmp/b64tok.txt
 
 4. De los resultados, se identificó el candidato:
    - `RkxBR3tCQVNFNjRfREVTQ0lGUkFET30K`
-5. Se decodificó con `echo 'RkxBR3tCQVNFNjRfREVTQ0lGUkFET30K' | base64 -d`.
+5. Se decodificó con:
+
+```bash
+echo 'RkxBR3tCQVNFNjRfREVTQ0lGUkFET30K' | base64 -d
+```
 
 ### Resultado
 Flag encontrada:
@@ -55,5 +57,42 @@ Flag encontrada:
 - Cadena Base64: `RkxBR3tCQVNFNjRfREVTQ0lGUkFET30K`
 - Decodificación: `echo 'RkxBR3tCQVNFNjRfREVTQ0lGUkFET30K' | base64 -d`
 
+![Imagen del proceso de búsqueda de la flag en el Desafío 1](img/challenge-2.png)
+
+## Desafío 3: Cifrado César y ROT13
+
+### Objetivo
+Descifrar mensajes usando ROT13 y Cifrado César (desplazamiento 3) para encontrar flags.
+
+### Proceso realizado
+1. Se inició sesión como `hacker` usando la flag del Desafío 2 como contraseña: `FLAG{BASE64_DESCIFRADO}`.
+2. Se revisaron los archivos del reto en `/home/hacker`:
+   - `/home/hacker/cifrado_rot13.txt`
+   - `/home/hacker/cifrado_cesar.txt`
+   - `/home/hacker/instrucciones.txt` (indica ROT13 y César shift 3).
+3. Se descifró ROT13 con `tr`:
+
+```bash
+cat /home/hacker/cifrado_rot13.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'
+```
+
+4. Se descifró César con desplazamiento 3 (corrimiento hacia atrás) con `tr`:
+
+```bash
+cat /home/hacker/cifrado_cesar.txt | tr 'A-Za-z' 'X-ZA-Wx-za-w'
+```
+
+### Resultado
+Flags encontradas:
+
+`FLAG{SECRET_FLAG_ROOT13}`
+
+`FLAG{CESAR_CIFRADO}`
+
+### Evidencia
+- ROT13: `/home/hacker/cifrado_rot13.txt`
+- César: `/home/hacker/cifrado_cesar.txt`
+- Instrucciones: `/home/hacker/instrucciones.txt`
+
 ### Imagen
-![Imagen del proceso de búsqueda y decodificación de la flag](img/challenge-2.png)
+![Imagen del proceso de búsqueda de la flag en el Desafío 3](img/challenge-3.png)
