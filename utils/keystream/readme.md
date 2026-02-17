@@ -181,3 +181,75 @@ El atacante cambio '100' por '900' sin conocer la clave.
 Sin mecanismo de autenticacion, el receptor no puede detectar que el mensaje fue alterado.
 
 ---
+
+## Validación y pruebas
+
+### 3.1 Ejemplos de Entrada/Salida
+
+```python
+ejemplos = [
+    ("Hola Mundo", "clave1"),
+    ("Cifrado de flujo XOR", "mi_seed_42"),
+    ("ABC", "key99"),
+]
+
+for texto, clave in ejemplos:
+    cifrado = encrypt_with_keystream(texto, clave)
+    descifrado = decrypt_with_keystream(cifrado, clave)
+```
+
+**Ejemplo 1:**
+```
+Texto plano:    "Hola Mundo"
+Clave:          "clave1"
+Cifrado (hex):  16 50 60 34 4a 16 0d 3f 52 58
+Descifrado:     "Hola Mundo"
+Coincide:       True
+```
+
+**Ejemplo 2:**
+```
+Texto plano:    "Cifrado de flujo XOR"
+Clave:          "mi_seed_42"
+Cifrado (hex):  18 11 37 44 56 40 62 62 37 75 29 68 43 49 2f 75 6b 70 0e 34
+Descifrado:     "Cifrado de flujo XOR"
+Coincide:       True
+```
+
+**Ejemplo 3:**
+```
+Texto plano:    "ABC"
+Clave:          "key99"
+Cifrado (hex):  47 05 37
+Descifrado:     "ABC"
+Coincide:       True
+```
+
+### 3.2 Pruebas Unitarias
+
+Las pruebas unitarias se encuentran en el directorio `tests/` y cubren los siguientes casos:
+
+**`tests/test_keystream.py`** - Generacion del keystream:
+- Determinismo: la misma semilla siempre genera el mismo keystream
+- Unicidad: semillas distintas generan keystreams distintos
+- Longitud correcta del keystream generado
+- Rango ASCII valido (0-127) en todos los caracteres
+- Manejo de errores (seed vacio, tipo invalido, longitud invalida)
+
+**`tests/test_keystream_cipher.py`** - Cifrado:
+- El cifrado retorna un string de la misma longitud que el plaintext
+- **Determinismo**: misma clave + mismo mensaje = mismo ciphertext
+- **Claves diferentes** producen ciphertexts diferentes
+- Round-trip: cifrar y luego hacer XOR de nuevo recupera el original
+- Manejo de string vacio y tipos invalidos
+
+**`tests/test_keystream_decipher.py`** - Descifrado:
+- **El descifrado recupera exactamente el mensaje original**
+- Longitud del texto descifrado coincide con el original
+- **Clave incorrecta NO recupera el plaintext**
+- Manejo de string vacio y tipos invalidos
+
+Ejecutar las pruebas:
+```bash
+python -m pytest tests/test_keystream.py tests/test_keystream_cipher.py tests/test_keystream_decipher.py -v
+```
