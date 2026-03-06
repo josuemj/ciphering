@@ -1,7 +1,7 @@
 """
 Triple DES (3DES) helpers for CBC mode encryption/decryption.
 
-Requirements satisfied:
+Requirements:
 - Secure key generation/validation for 16-byte (2-key) and 24-byte (3-key) 3DES.
 - Random IV per encryption (8 bytes, DES block size) using `secrets.token_bytes`.
 - PKCS#7 padding via Crypto.Util.Padding (spec says use library pad/unpad, not manual).
@@ -40,7 +40,7 @@ def generate_iv() -> bytes:
     return secrets.token_bytes(DES_BLOCK_SIZE)
 
 
-def triple_des_cbc_encrypt(plaintext: bytes, key: bytes) -> Tuple[bytes, bytes]:
+def triple_des_cbc_encrypt(plaintext: bytes, key: bytes, *, iv: bytes | None = None) -> Tuple[bytes, bytes]:
     """
     Encrypt arbitrary plaintext with 3DES-CBC.
 
@@ -50,7 +50,15 @@ def triple_des_cbc_encrypt(plaintext: bytes, key: bytes) -> Tuple[bytes, bytes]:
     if not isinstance(plaintext, (bytes, bytearray)):
         raise TypeError("plaintext must be bytes")
 
-    iv = generate_iv()
+    if iv is None:
+        iv = generate_iv()
+    else:
+        if not isinstance(iv, (bytes, bytearray)):
+            raise TypeError("iv must be bytes")
+        if len(iv) != DES_BLOCK_SIZE:
+            raise ValueError("IV must be 8 bytes for 3DES")
+        iv = bytes(iv)
+
     adjusted_key = _validate_and_adjust_key(key)
     cipher = DES3.new(adjusted_key, DES3.MODE_CBC, iv=iv)
     padded = pad(bytes(plaintext), DES_BLOCK_SIZE)

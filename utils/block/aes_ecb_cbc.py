@@ -49,13 +49,16 @@ def aes_ecb_encrypt_image(image_data: bytes, key: bytes, header_size: int = 54) 
     return header + encrypted_pixels[: len(pixels)]
 
 
-def aes_cbc_encrypt_image(image_data: bytes, key: bytes, header_size: int = 54) -> bytes:
+def aes_cbc_encrypt_image(
+    image_data: bytes, key: bytes, header_size: int = 54, *, iv: bytes | None = None
+) -> bytes:
     """Encrypt BMP pixel data with AES-256 CBC, keeping the header intact.
 
     Args:
         image_data: Raw BMP file bytes.
         key: 32-byte AES key.
         header_size: Number of header bytes to preserve (default 54 for BMP).
+        iv: Optional 16-byte IV. If omitted, a fresh random IV is generated.
 
     Returns:
         BMP bytes with original header and CBC-encrypted pixel data.
@@ -64,8 +67,15 @@ def aes_cbc_encrypt_image(image_data: bytes, key: bytes, header_size: int = 54) 
     header = image_data[:header_size]
     pixels = image_data[header_size:]
 
-    iv = generate_aes_iv()
-    cipher = AES.new(key, AES.MODE_CBC, iv=iv)
+    if iv is None:
+        iv = generate_aes_iv()
+    else:
+        if not isinstance(iv, (bytes, bytearray)):
+            raise TypeError("iv must be bytes")
+        if len(iv) != AES_BLOCK_SIZE:
+            raise ValueError("iv must be 16 bytes for AES")
+
+    cipher = AES.new(key, AES.MODE_CBC, iv=bytes(iv))
     encrypted_pixels = cipher.encrypt(pad(pixels, AES_BLOCK_SIZE))
 
     return header + encrypted_pixels[: len(pixels)]
