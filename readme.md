@@ -70,3 +70,9 @@ ciphering/
 - `utils/number_to_binary.py`: Converts numbers to binary format.
 - `utils/text_to_binary.py`: Converts plain text to binary.
 - `utils/xor.py`: Bitwise XOR helper operations.
+
+## Running Tests
+
+```bash
+python -m unittest discover -s tests -v
+```
