@@ -9,3 +9,19 @@ El sistema debe garantizar:
 ### 1. El sistema usa RSA como mecanismo de intercambio de clave, protegiendo una clave AES que cifra el documento real.
 - RSA no soporta archivos grandes de forma directa: con una clave típica (p. ej., RSA‑2048) solo puedes cifrar unos cientos de bytes por operación; un contrato/PDF requiere partirlo en muchos bloques, lo que complica el diseño.
 - Sería muy lento y caro computacionalmente: cifrar megabytes con RSA es muchísimo más lento que con AES, especialmente si hay muchos documentos y usuarios.
+
+### 2. Generación de claves RSA en `generar_claves.py`
+
+Generar claves y guardar los PEM en `utils/rsa/assets/` (ejemplo con la passphrase requerida `lab04uvg`):
+```bash
+python3 utils/rsa/generar_claves.py --passphrase lab04uvg
+```
+
+Archivos generados:
+- `utils/rsa/assets/private_key.pem` (protegida con passphrase)
+- `utils/rsa/assets/public_key.pem`
+
+Opcional (cambiar bits):
+```bash
+python3 utils/rsa/generar_claves.py --bits 3072 --passphrase lab04uvg
+```
