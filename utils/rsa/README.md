@@ -25,3 +25,9 @@ Opcional (cambiar bits):
 ```bash
 python3 utils/rsa/generar_claves.py --bits 3072 --passphrase lab04uvg
 ```
+
+¿Qué información contiene un archivo .pem?
+- Un archivo .pem (Privacy-Enhanced Mail) es un contenedor en texto ASCII que guarda datos criptográficos (clave pública, clave privada, certificado X.509, cadena de certificados, CSR, etc.) en este formato:
+- Una línea de inicio: -----BEGIN ...-----
+- Un bloque de Base64 (que es el binario real en formato DER/ASN.1, pero “armored”texto)
+- Una línea de fin: -----END ...-----
