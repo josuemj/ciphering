@@ -8,7 +8,14 @@ import getpass
 import os
 import sys
 from pathlib import Path
-from Crypto.PublicKey import RSA
+
+try:
+    from Crypto.PublicKey import RSA
+except ModuleNotFoundError as exc:  # pragma: no cover
+    raise SystemExit(
+        "Dependencia faltante: pycryptodome.\n"
+        "Instala dependencias con: pip3 install -r requirements.txt"
+    ) from exc
 
 
 
