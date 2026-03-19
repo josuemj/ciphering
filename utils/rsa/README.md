@@ -12,9 +12,20 @@ El sistema debe garantizar:
 
 ### 2. Generación de claves RSA en `generar_claves.py`
 
+Instalar dependencias:
+```bash
+pip3 install -r requirements.txt
+```
+
 Generar claves y guardar los PEM en `utils/rsa/assets/` (ejemplo con la passphrase requerida `lab04uvg`):
 ```bash
 python3 utils/rsa/generar_claves.py --passphrase lab04uvg
+```
+
+Alternativa (sin exponer la passphrase en el comando):
+```bash
+export RSA_PASSPHRASE='lab04uvg'
+python3 utils/rsa/generar_claves.py
 ```
 
 Archivos generados:
@@ -26,8 +37,31 @@ Opcional (cambiar bits):
 python3 utils/rsa/generar_claves.py --bits 3072 --passphrase lab04uvg
 ```
 
-¿Qué información contiene un archivo .pem?
-- Un archivo .pem (Privacy-Enhanced Mail) es un contenedor en texto ASCII que guarda datos criptográficos (clave pública, clave privada, certificado X.509, cadena de certificados, CSR, etc.) en este formato:
-- Una línea de inicio: -----BEGIN ...-----
-- Un bloque de Base64 (que es el binario real en formato DER/ASN.1, pero “armored”texto)
-- Una línea de fin: -----END ...-----
+### 3. Cifrado y Descifrado Directo con RSA-OAEP
+
+Este ejemplo cifra el texto `"mensaje"` con la **clave pública** usando RSA-OAEP, y luego lo descifra con la **clave privada**.
+
+Puntos clave:
+- El cifrado con OAEP es **aleatorio** (aunque el mensaje sea el mismo, el ciphertext cambia en cada corrida).
+- RSA-OAEP se usa para **mensajes cortos**; para documentos completos se usa cifrado híbrido (RSA + AES).
+
+```bash
+export RSA_PASSPHRASE='lab04uvg'
+python3 utils/rsa/rsa_oeap.py --message "mensaje"
+```
+
+Salida:
+```text
+Cifrado (base64): F2wGKmsB5mTFMqwpU1LdGrzyFRdzyruUBxETxMT7wGLRcN5K3Zj+SgqgbEPq5Zg1MLWEfCk2a4zd31FF1OHhdchfY87JAqAgVk6pldroP6FlWOtcLHFejy58hqnHnIE8NnK9P37O0m4W/dhhbkplhPOjFwinzndtr+M550eZ+VE2q5PcHWcfnpvygJozYak/a0JMWTDKlGBX+0tz6oYrlHr3N0X7JSPw2nygHLMSKWW70dKuK6YYq51DlOBwmHH5pTCAthT/G2Ats0v9Ka1QrUbqD2j99m+9Fawnynzu7M2DIicEqq/XwDEBA9m5N4zOWHuRF23Vl/FRfKaosXJCyA==
+Descifrado: mensaje
+```
+
+```bash
+python3 utils/rsa/rsa_oeap.py --message "mensaje" --passphrase lab04uvg
+```
+
+Salida:
+```text
+Cifrado (base64): IJKUc7XSsAJMgio3sNAxr1Lk/cIXKS1vsJ25x4wI3kiKXjOMY04kYF+RBFhhSy/Gct8Aw8j4oVvtbqeYtDuEss0l9xuKFS5+0+yFwGcSmRYxi0i1YjECnMwg8y1m58Ukwgqy2y2rRkrUEz/l1QNugWK5QrAlq8sS1J5bmxOArPH4yPZua2+ODpPGGn5Xa34Tt8w8u4LhJqzHGmNzcPMnnOLcL/ebp/Ikkko5H/JFvEI+32IGXS65PrnffgyyFwpaAwz+0KylChjQa6uCPd6mkocemS3lLQiqIujNOJkQicSNnLrVd7LsmdGJHI+5IV/DrL12+OEaRAnP2QYLSrBFVg==
+Descifrado: mensaje
+```
