@@ -65,3 +65,6 @@ Salida:
 Cifrado (base64): IJKUc7XSsAJMgio3sNAxr1Lk/cIXKS1vsJ25x4wI3kiKXjOMY04kYF+RBFhhSy/Gct8Aw8j4oVvtbqeYtDuEss0l9xuKFS5+0+yFwGcSmRYxi0i1YjECnMwg8y1m58Ukwgqy2y2rRkrUEz/l1QNugWK5QrAlq8sS1J5bmxOArPH4yPZua2+ODpPGGn5Xa34Tt8w8u4LhJqzHGmNzcPMnnOLcL/ebp/Ikkko5H/JFvEI+32IGXS65PrnffgyyFwpaAwz+0KylChjQa6uCPd6mkocemS3lLQiqIujNOJkQicSNnLrVd7LsmdGJHI+5IV/DrL12+OEaRAnP2QYLSrBFVg==
 Descifrado: mensaje
 ```
+
+- ¿Porqué cifrar el mismo mensaje dos veces produce resultados distintos?
+RSA-OAEP incorpora un proceso de relleno aleatorio (padding) que introduce entropía adicional en el cifrado. Esto significa que incluso si el mensaje de entrada es el mismo, el resultado del cifrado será diferente cada vez debido a este componente aleatorio. Este diseño mejora la seguridad al hacer que los ataques de texto plano conocido sean más difíciles.
