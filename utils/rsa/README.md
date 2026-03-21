@@ -68,3 +68,24 @@ Descifrado: mensaje
 
 - ¿Porqué cifrar el mismo mensaje dos veces produce resultados distintos?
 RSA-OAEP incorpora un proceso de relleno aleatorio (padding) que introduce entropía adicional en el cifrado. Esto significa que incluso si el mensaje de entrada es el mismo, el resultado del cifrado será diferente cada vez debido a este componente aleatorio. Este diseño mejora la seguridad al hacer que los ataques de texto plano conocido sean más difíciles.
+
+### 4. Cifrado Híbrido RSA-OAEP + AES-256-GCM
+
+Este flujo permite cifrar documentos grandes:
+- Genera una clave AES aleatoria de **256 bits**.
+- Cifra el documento con **AES-GCM**, produciendo `nonce + tag + ciphertext`.
+- Cifra (envuelve) la clave AES con **RSA-OAEP** usando la clave pública del destinatario.
+- El paquete cambia en cada corrida por el `nonce` aleatorio de GCM (y la aleatoriedad interna).
+
+```bash
+export RSA_PASSPHRASE='lab04uvg'
+python3 utils/rsa/rsa_hibrido.py
+```
+
+Salida (ejemplo real):
+```text
+Paquete (base64): SFlCMQEAKJ98CXkiXDZyce9Zu11YO1k4S9etCY7+prbQXV1GH2b3GwomQVs6TOpvCazdNdBd1uvzjcKT++Q89/bXDO/gVQFZ2VwQEwK1GrAd1OV3LboL9+iG3qETiV43BIkKlh9AmmqJYjZvBjSosaQrO8rbawj+iniln57dYJYI7NCExbzkbT8PiCjwV++TDda5A7oug2VRy8OfWjsKOiRJkdpGj1vpHFSBcVlSRjGSUYou4SmWUQDhDakCTbtYS3KqJOdMEWiuEORrP8ePwDPmuVhfzNprHZvS2nr919FVXk/k7nnIfAt8cvyyG3QAgeqFi6w97jZa5Ska3lAmCI0ImK9H4AxQ9IXpj71awcQAdlcI3zzbFbqb0eCqzYmfmux8MhdXy7tjf2/ME1gVnuKQCvVT7+knIMC0Qy8ATq6uMBMlyUIc8VnOBNJwFmI=
+Descifrado: Contrato de confidencialidad No. 2025-GT-001
+Doc pequeño: OK
+Archivo 1 MB: OK
+```
