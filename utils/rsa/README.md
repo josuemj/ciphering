@@ -12,11 +12,6 @@ El sistema debe garantizar:
 
 ### 2. Generación de claves RSA en `generar_claves.py`
 
-Instalar dependencias:
-```bash
-pip3 install -r requirements.txt
-```
-
 Generar claves y guardar los PEM en `utils/rsa/assets/` (ejemplo con la passphrase requerida `lab04uvg`):
 ```bash
 python3 utils/rsa/generar_claves.py --passphrase lab04uvg
@@ -31,11 +26,6 @@ python3 utils/rsa/generar_claves.py
 Archivos generados:
 - `utils/rsa/assets/private_key.pem` (protegida con passphrase)
 - `utils/rsa/assets/public_key.pem`
-
-Opcional (cambiar bits):
-```bash
-python3 utils/rsa/generar_claves.py --bits 3072 --passphrase lab04uvg
-```
 
 ### 3. Cifrado y Descifrado Directo con RSA-OAEP
 
