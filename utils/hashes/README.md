@@ -82,3 +82,60 @@ SHA-256 es **rápido por diseño** — puede calcular miles de millones de hashe
 La API de HIBP usa **SHA-1**, no SHA-256. El lab muestra SHA-256 como ilustración del hash directo vulnerable, pero el lookup real requiere SHA-1 siguiendo el protocolo de HIBP. Ambos hashes se calculan localmente; solo el prefijo SHA-1 de 5 caracteres sale de la máquina.
 
 ---
+
+## Ejercicio 3 — Verificación de integridad de distribución
+
+**Archivos:** `generar_manifiesto.py`, `verificar_paquete.py`, `simulacion_ej3.py`
+
+```
+generar_manifiesto.py   ← módulo MediSoft (publicador)
+  sha256_archivo()          calcula SHA-256 de un archivo en bloques
+  agregar_al_manifiesto()   escribe una línea al SHA256SUMS.txt
+  generar_manifiesto()      orquesta ambas para N archivos
+
+verificar_paquete.py    ← módulo Hospital (verificador)
+  leer_manifiesto()         parsea SHA256SUMS.txt → {nombre: hash}
+  verificar_archivo()       recalcula SHA-256 y compara
+  verificar_paquete()       verifica todos los archivos del manifiesto
+
+simulacion_ej3.py       ← script de simulación (invoca ambos módulos)
+  paso_1: crea paquete_medisoft/ con 5 archivos simulados
+  paso_2: genera SHA256SUMS.txt
+  paso_3: verifica (todo OK)
+  paso_4: atacante modifica un byte en update_script.sh
+  paso_5: re-verifica (detecta la manipulación)
+```
+
+### Ejecución
+
+```bash
+# Desde utils/hashes/
+python simulacion_ej3.py
+```
+
+### Salida — Verificación 1 (paquete íntegro)
+
+| Archivo | Estado |
+|---|---|
+| config.ini | OK |
+| firmware_analizador.bin | OK |
+| driver_lab.dll | OK |
+| update_script.sh | OK |
+| release_notes.txt | OK |
+
+### Salida — Verificación 2 (byte modificado en `update_script.sh`)
+
+| Archivo | Estado | Detalle |
+|---|---|---|
+| config.ini | OK | — |
+| firmware_analizador.bin | OK | — |
+| driver_lab.dll | OK | — |
+| **update_script.sh** | **FALLO** | byte pos 32: `0x6F` → `0x70` |
+| release_notes.txt | OK | — |
+
+```
+esperado : cb47ea5585d1f560b42d5b476ba26546e77dabd7de1a5ef0697aff08d3af97fc
+real     : ff8ae3ec36a3f73b8e50688bc05af6ac5ad2fa40ca5df83e42f36ea5cf255960
+```
+
+Un solo byte cambiado produce un hash completamente distinto (efecto avalancha).

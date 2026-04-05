@@ -1,0 +1,5 @@
+MZ_HEADER_SIMULATED
+EXPORT:connect_device
+EXPORT:read_sample
+EXPORT:calibrate
+EXPORT:disconnect
