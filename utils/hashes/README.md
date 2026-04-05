@@ -139,3 +139,64 @@ real     : ff8ae3ec36a3f73b8e50688bc05af6ac5ad2fa40ca5df83e42f36ea5cf255960
 ```
 
 Un solo byte cambiado produce un hash completamente distinto (efecto avalancha).
+
+---
+
+## Ejercicios 4 y 5 — Autenticidad del manifiesto (Firma Digital RSA-PSS)
+
+**Archivos:** `generar_claves_rsa.py`, `firmar_manifiesto.py`, `verificar_firma.py`, `simulacion_ej4_5.py`
+
+### Arquitectura
+
+```
+generar_claves_rsa.py        generar_par_claves()   → (pem_priv, pem_pub)
+                             guardar_claves()        → medisoft_priv.pem / medisoft_pub.pem
+
+firmar_manifiesto.py         firmar_manifiesto()     → SHA256SUMS.sig (256 bytes, RSA-PSS)
+
+verificar_firma.py           verificar_firma_manifiesto() → (bool, mensaje)
+
+simulacion_ej4_5.py          orquesta los 3 módulos + verificar_paquete en 10 pasos
+```
+
+```
+claves_medisoft/
+  medisoft_priv.pem       ← PRIVADA — nunca se distribuye (solo MediSoft)
+paquete_medisoft/
+  SHA256SUMS.txt          ← manifiesto (del ej3)
+  SHA256SUMS.sig          ← firma RSA-PSS del manifiesto
+  medisoft_pub.pem        ← PUBLICA — se distribuye con el paquete
+```
+
+### Ejecución
+
+```bash
+# Desde utils/hashes/ (requiere haber corrido simulacion_ej3.py antes)
+python simulacion_ej4_5.py
+```
+
+### Resultados
+
+| Paso | Escenario | Firma | verificar_paquete |
+|---|---|---|---|
+| 3 | Paquete original | **VALIDA** | 5/5 OK |
+| 5 | SHA256SUMS.txt alterado (1 char) | **INVALIDA** | — |
+| 8 | `firmware_analizador.bin` alterado, manifiesto intacto | **VALIDA** | 3/5 OK (falla) |
+
+### Respuesta: ¿Por qué la firma es válida pero `verificar_paquete` falla?
+
+Las dos capas protegen cosas distintas:
+
+| Capa | Qué protege | Cómo |
+|---|---|---|
+| **Firma RSA-PSS** | La autenticidad del manifiesto | SHA-256(SHA256SUMS.txt) cifrado con clave privada |
+| **Hashes del manifiesto** | La integridad de cada archivo | SHA-256(archivo) comparado contra SHA256SUMS.txt |
+
+Cuando el atacante modifica `firmware_analizador.bin` sin tocar `SHA256SUMS.txt`:
+- **Capa 1 pasa**: el manifiesto no cambió, la firma sigue siendo válida
+- **Capa 2 falla**: el hash recalculado del archivo no coincide con el del manifiesto
+
+Para que el ataque sea indetectable el atacante necesitaría:
+1. Modificar el archivo
+2. Recalcular el SHA-256 y actualizar `SHA256SUMS.txt`
+3. Firmar el nuevo `SHA256SUMS.txt` con la **clave privada de MediSoft** — computacionalmente imposible sin ella
