@@ -1,0 +1,5 @@
+MediSoft v2.1.0 — Release Notes
+================================
+- Correccion: timeout en lecturas de alta frecuencia
+- Mejora: calibracion automatica al iniciar
+- Seguridad: TLS 1.3 para comunicacion con servidor
