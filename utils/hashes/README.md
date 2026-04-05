@@ -46,3 +46,39 @@ MD5 produce un digest de solo **128 bits**. Por el principio del cumpleaños, la
 ```
 
 En teoría esto parece grande, pero en la práctica se han encontrado colisiones estructurales — dos entradas distintas con el mismo MD5 — en segundos usando hardware moderno. Las colisiones permiten que un atacante genere un paquete malicioso con el mismo hash que el legítimo: el hospital descargaría malware pensando que el hash coincide.
+
+---
+
+## Ejercicio 2 — Verificación contra filtraciones (HIBP k-Anonymity)
+
+**Archivo:** `hibp_check.py`
+
+### Descripción
+
+Se toma una lista de contraseñas comunes, se calcula su SHA-256 (para ilustrar la vulnerabilidad) y su SHA-1 (requerido por la API de HIBP), y se consulta [Have I Been Pwned](https://haveibeenpwned.com/) para saber cuántas veces aparecen en filtraciones públicas, sin revelar el hash completo.
+
+### Ejecución
+
+```bash
+# Desde utils/hashes/
+python hibp_check.py
+```
+
+### Resultados
+
+| Password | SHA-256 | SHA-1 prefix | Filtraciones |
+|---|---|---|---:|
+| admin | `8c6976e5...` | `D033E...` | 42,085,691 |
+| 123456 | `8d969eef...` | `7C4A8...` | 209,972,844 |
+| hospital | `8afe3c83...` | `2B2D0...` | 118,791 |
+| medisoft2024 | `78c12e8e...` | `F80CF...` | **No encontrado** |
+
+### ¿Por qué SHA-256 directo es inseguro para contraseñas?
+
+SHA-256 es **rápido por diseño** — puede calcular miles de millones de hashes por segundo en una GPU moderna. Para contraseñas comunes como `admin` o `123456`, los atacantes precalculan tablas rainbow con SHA-256 de millones de contraseñas. Al robar la base de datos, basta buscar el hash y obtener la contraseña en milisegundos.
+
+### Nota técnica: SHA-1 vs SHA-256 en HIBP
+
+La API de HIBP usa **SHA-1**, no SHA-256. El lab muestra SHA-256 como ilustración del hash directo vulnerable, pero el lookup real requiere SHA-1 siguiendo el protocolo de HIBP. Ambos hashes se calculan localmente; solo el prefijo SHA-1 de 5 caracteres sale de la máquina.
+
+---
